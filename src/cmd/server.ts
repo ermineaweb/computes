@@ -7,15 +7,20 @@ const app = express();
 const userRepository = new UserRepositoryInMemory();
 const userService = new UserService(userRepository);
 
-app.post("/", (req, res) => {
-  res.status(200).json(userService.create({ username: "abc" }));
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  return next();
 });
 
-app.get("/", (req, res) => {
+app.post("/user", (req, res) => {
+  res.status(200).json(userService.create({ username: "jane" }));
+});
+
+app.get("/user", (req, res) => {
   res.status(200).json(userService.getAll());
 });
 
-app.get("/:id", (req, res) => {
+app.get("/user/:id", (req, res) => {
   const id = parseInt(req.params.id);
   res.status(200).json(userService.getUser(id));
 });
